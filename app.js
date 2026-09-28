@@ -50,3 +50,15 @@ app.post('/articles', (req, res) => {
   articles.push(baru);
   res.status(201).json(baru);
 });
+
+app.put('/articles/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = articles.findIndex((a) => a.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Data tidak ditemukan' });
+  }
+
+  articles[index] = { ...articles[index], ...req.body, id };
+  res.json(articles[index]);
+});
