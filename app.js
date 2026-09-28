@@ -14,14 +14,9 @@ app.use(express.json());
 
 let articles = [
   { id: 1, judul: 'Mengenal REST API', isi: 'REST adalah gaya arsitektur ...', penulis: 'Nadia Putri', kategori: 'Teknologi', dipublikasikan: true},
-  { id: 2, judul: 'Budi', isi: 'Informatika', penulis: 'John Doe', kategori: 'Teknologi', dipublikasikan: false },
+  { id: 2, judul: 'Tragedi Dibalik Asap di Palembang', isi: 'Isi artikel tentang tragedi di Palembang', penulis: 'Aldi Wijaya', kategori: 'Tragedi', dipublikasikan: false },
 ];
 let nextId = 3;
-
-app.get('/articles', (req, res) => {
-  res.json(articles);
-});
-
 
 app.get('/articles/:id', (req, res) => {
   const id = parseInt(req.params.id);
@@ -41,4 +36,17 @@ app.get('/articles', (req, res) => {
   }
 
   res.json(articles);
+});
+
+app.post('/articles', (req, res) => {
+  const { judul, isi, penulis, kategori, dipublikasikan } = req.body;
+
+  if (!judul || !isi || !penulis || !kategori) {
+    return res.status(400).json({ message: 'Semua field wajib diisi' });
+  }
+
+  const baru = { id: nextId++, judul, isi, penulis, kategori, dipublikasikan };
+
+  articles.push(baru);
+  res.status(201).json(baru);
 });
