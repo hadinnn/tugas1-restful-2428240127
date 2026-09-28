@@ -6,10 +6,6 @@ app.get('/', (req, res) => {
   res.send('Server Express.js berjalan!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server berjalan di http://localhost:${PORT}`);
-});
-
 app.use(express.json());
 
 let articles = [
@@ -61,4 +57,20 @@ app.put('/articles/:id', (req, res) => {
 
   articles[index] = { ...articles[index], ...req.body, id };
   res.json(articles[index]);
+});
+
+app.delete('/articles/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = articles.findIndex((a) => a.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Data tidak ditemukan' });
+  }
+
+  articles.splice(index, 1);
+  res.status(204).send();
+});
+
+app.listen(PORT, () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
 });
